@@ -155,7 +155,7 @@ resource "openstack_blockstorage_volume_v3" "volume_server" {
 #}
 
 # Creating a server
-resource "openstack_compute_instance_v2" "server_tf" {
+resource "openstack_compute_instance_v2" "volume_server_k8s1" {
   name              = "server_k8s1"
   flavor_id         = 9024
 #  openstack_compute_flavor_v2.flavor_server.id
@@ -163,6 +163,7 @@ resource "openstack_compute_instance_v2" "server_tf" {
   availability_zone = var.az_zone
   network {
     uuid = openstack_networking_network_v2.network_tf.id
+    fixed_ip_v4 = "10.10.0.21"
   }
   block_device {
     uuid             = openstack_blockstorage_volume_v3.volume_server.id
@@ -170,7 +171,7 @@ resource "openstack_compute_instance_v2" "server_tf" {
     destination_type      = "volume"
     boot_index       = 0
   }
-  
+   
 #  block_device {
 #    uuid                  = "${openstack_blockstorage_volume_v2.volume_1.id}"
 #    source_type           = "volume"
