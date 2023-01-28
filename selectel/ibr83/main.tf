@@ -94,6 +94,15 @@ data "openstack_images_image_v2" "ubuntu_image" {
   ]
 }
 
+data "openstack_images_image_v2" "ubuntu_22_image" {
+  most_recent = true
+  visibility  = "public"
+  name        = "Ubuntu 22.04 LTS 64-bit"
+  depends_on = [
+    selectel_vpc_role_v2.role_tf_user_1
+  ]
+}
+
 data "openstack_images_image_v2" "oracle_image" {
   most_recent = true
   visibility  = "public"
@@ -137,7 +146,7 @@ resource "openstack_compute_flavor_v2" "flavor_server" {
 resource "openstack_blockstorage_volume_v3" "volume_server" {
   name                 = "server-${random_string.random_name_server.result}"
   size                 = "60"
-  image_id             = data.openstack_images_image_v2.centos_image.id
+  image_id             = data.openstack_images_image_v2.ubuntu_22_image.id
   volume_type          = var.volume_type_basissd
   availability_zone    = var.az_zone
   enable_online_resize = true
@@ -192,7 +201,7 @@ resource "openstack_compute_instance_v2" "volume_server_k8s1" {
 resource "openstack_blockstorage_volume_v3" "volume_server_k8s2" {
   name                 = "server-${random_string.random_name_server.result}"
   size                 = "60"
-  image_id             = data.openstack_images_image_v2.centos_image.id
+  image_id             = data.openstack_images_image_v2.ubuntu_22_image.id
   volume_type          = var.volume_type_basissd
   availability_zone    = var.az_zone
   enable_online_resize = true
